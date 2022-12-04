@@ -41,7 +41,7 @@
     focus_new_windows: true,
     keybind: [
         (command: Execute, value: "rofi -show drun", modifier: ["modkey"], key: "p"),
-        (command: Execute, value: "alacritty --config-file ~/.config/leftwm/themes/leftwm-arch-one-dark/alacritty/alacritty.yml", modifier: ["modkey", "Shift"], key: "a"),
+        (command: Execute, value: "alacritty", modifier: ["modkey", "Shift"], key: "a"),
         (command: CloseWindow, value: "", modifier: ["modkey", "Shift"], key: "c"),
         (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
         (command: Execute, value: "loginctl kill-session $XDG_SESSION_ID", modifier: ["modkey", "Shift"], key: "q"),
