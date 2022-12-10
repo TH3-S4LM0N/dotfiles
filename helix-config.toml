@@ -1,0 +1,20 @@
+theme = "onedark"
+
+[editor]
+line-number = "relative"
+mouse = true
+scrolloff = 5
+scroll-lines = 1
+shell = ["fish", "-c"]
+cursorline = true
+auto-info = false # untested
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name", "file-type"]
+right = ["diagnostics", "position"]
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "block"
