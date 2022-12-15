@@ -14,4 +14,5 @@ if status is-interactive
     alias mkdir="mkdir -p"
     alias neoflex="neofetchs | lolcat"
     alias cmatrix="cmatrix -abs | lolcat"
+    alias spt="spt-start.sh"
 end

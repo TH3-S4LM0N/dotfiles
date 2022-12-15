@@ -1,0 +1,13 @@
+[SddmGreeterTheme]
+Name=Salmon's OneDark
+Description=aaaaaa
+Author=TH3 S4LM0N
+Type=sddm-theme
+Version=1.0
+Website=https://github.com/TH3-S4LM0N/dotfiles
+Screenshot=Background.jpg
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Theme-Id=salmon-onedark
+Theme-API=2.11
