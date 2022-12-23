@@ -12,7 +12,7 @@ if status is-interactive
     alias rm="sudo rm -r"
     alias cp="cp -r"
     alias mkdir="mkdir -p"
-    alias neoflex="neofetchs | lolcat"
+    alias neoflex="neofetch | lolcat"
     alias cmatrix="cmatrix -abs | lolcat"
     alias spt="spt-start.sh"
 end

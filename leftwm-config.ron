@@ -37,6 +37,7 @@
     focus_new_windows: true,
     keybind: [
         (command: Execute, value: "rofi -show drun -theme ~/.config/rofi/theme", modifier: ["modkey"], key: "p"),
+        (command: Execute, value: "gnome-screenshot -a -f '/home/salmon/.screenshot.png'", modifier: ["modkey", "Shift"], key: "s"),
         (command: Execute, value: "alacritty", modifier: ["modkey", "Shift"], key: "a"),
         (command: CloseWindow, value: "", modifier: ["modkey", "Shift"], key: "c"),
         (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
