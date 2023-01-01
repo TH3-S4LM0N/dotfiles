@@ -20,153 +20,22 @@
 import QtQuick 2.11
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.4
-import QtGraphicalEffects 1.0
 
 Column {
     id: inputContainer
     Layout.fillWidth: true
 
     property Control exposeLogin: loginButton
-    property bool failed
 
-    // USERNAME INPUT
     Item {
         id: usernameField
-
-        height: root.font.pointSize * 4.5
+        height: root.font.pointSize * 3.25
         width: parent.width / 2
         anchors.horizontalCenter: parent.horizontalCenter
 
-        ComboBox {
-
-            id: selectUser
-
-            width: parent.height
-            height: parent.height
-            anchors.left: parent.left
-            z: 2
-
-            model: userModel
-            currentIndex: model.lastIndex
-            textRole: "name"
-            hoverEnabled: true
-            onActivated: {
-                username.text = currentText
-            }
-
-            delegate: ItemDelegate {
-                width: parent.width
-                anchors.horizontalCenter: parent.horizontalCenter
-                contentItem: Text {
-                    text: model.realName != "" ? model.realName : model.name
-                    font.pointSize: root.font.pointSize * 0.8
-                    font.capitalization: Font.Capitalize
-                    color: selectUser.highlightedIndex === index ? "#444" : root.palette.highlight
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                }
-                highlighted: parent.highlightedIndex === index
-                background: Rectangle {
-                    color: selectUser.highlightedIndex === index ? root.palette.highlight : "transparent"
-                }
-            }
-
-            indicator: Button {
-                    id: usernameIcon
-                    width: selectUser.height * 0.8
-                    height: parent.height
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.leftMargin: selectUser.height * 0.125
-                    icon.height: parent.height * 0.25
-                    icon.width: parent.height * 0.25
-                    enabled: false
-                    icon.color: root.palette.text
-                    icon.source: Qt.resolvedUrl("../Assets/User.svgz")
-            }
-
-            background: Rectangle {
-                color: "transparent"
-                border.color: "transparent"
-            }
-
-            popup: Popup {
-                y: parent.height - username.height / 3
-                rightMargin: config.ForceRightToLeft == "true" ? root.padding + usernameField.width / 2 : undefined
-                width: usernameField.width
-                implicitHeight: contentItem.implicitHeight
-                padding: 10
-
-                contentItem: ListView {
-                    clip: true
-                    implicitHeight: contentHeight + 20
-                    model: selectUser.popup.visible ? selectUser.delegateModel : null
-                    currentIndex: selectUser.highlightedIndex
-                    ScrollIndicator.vertical: ScrollIndicator { }
-                }
-
-                background: Rectangle {
-                    radius: config.RoundCorners / 2
-                    color: "#444"
-                    layer.enabled: true
-                    layer.effect: DropShadow {
-                        transparentBorder: true
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        radius: 100
-                        samples: 201
-                        cached: true
-                        color: "#88000000"
-                    }
-                }
-
-                enter: Transition {
-                    NumberAnimation { property: "opacity"; from: 0; to: 1 }
-                }
-            }
-
-            states: [
-                State {
-                    name: "pressed"
-                    when: selectUser.down
-                    PropertyChanges {
-                        target: usernameIcon
-                        icon.color: Qt.lighter(root.palette.highlight, 1.1)
-                    }
-                },
-                State {
-                    name: "hovered"
-                    when: selectUser.hovered
-                    PropertyChanges {
-                        target: usernameIcon
-                        icon.color: Qt.lighter(root.palette.highlight, 1.2)
-                    }
-                },
-                State {
-                    name: "focused"
-                    when: selectUser.visualFocus
-                    PropertyChanges {
-                        target: usernameIcon
-                        icon.color: root.palette.highlight
-                    }
-                }
-            ]
-
-            transitions: [
-                Transition {
-                    PropertyAnimation {
-                        properties: "color, border.color, icon.color"
-                        duration: 150
-                    }
-                }
-            ]
-
-        }
-
         TextField {
             id: username
-            text: config.ForceLastUser == "true" ? selectUser.currentText : null
-            font.capitalization: Font.Capitalize
+            text: config.ForceLastUser == "true" ? userModel.lastUser : ""
             anchors.centerIn: parent
             height: root.font.pointSize * 3
             width: parent.width
@@ -182,27 +51,45 @@ Column {
             }
             Keys.onReturnPressed: loginButton.clicked()
             KeyNavigation.down: password
-            z: 1
-
-            states: [
-                State {
-                    name: "focused"
-                    when: username.activeFocus
-                    PropertyChanges {
-                        target: username.background
-                        border.color: root.palette.highlight
-                    }
-                    PropertyChanges {
-                        target: username
-                        color: root.palette.highlight
-                    }
-                }
-            ]
         }
 
+        Button {
+            id: usernameIcon
+            anchors.horizontalCenter: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenterOffset: username.height * 0.6
+            icon.height: username.height * 0.4
+            icon.width: username.height * 0.4
+            enabled: false
+            icon.color: root.palette.text
+            icon.source: Qt.resolvedUrl("../Assets/Icons/User.svg")
+        }
+
+        states: [
+            State {
+                name: "focused"
+                when: username.activeFocus
+                PropertyChanges {
+                    target: username.background
+                    border.color: config.AccentColor
+                }
+                PropertyChanges {
+                    target: username
+                    color: config.AccentColor
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                PropertyAnimation {
+                    properties: "color, border.color"
+                    duration: 150
+                }
+            }
+        ]
     }
 
-    // PASSWORD INPUT
     Item {
         id: passwordField
         height: root.font.pointSize * 4.5
@@ -238,11 +125,11 @@ Column {
                 when: password.activeFocus
                 PropertyChanges {
                     target: password.background
-                    border.color: root.palette.highlight
+                    border.color: config.AccentColor
                 }
                 PropertyChanges {
                     target: password
-                    color: root.palette.highlight
+                    color: config.AccentColor
                 }
             }
         ]
@@ -257,7 +144,6 @@ Column {
         ]
     }
 
-    // SHOW/HIDE PASS
     Item {
         id: secretCheckBox
         height: root.font.pointSize * 7
@@ -272,9 +158,6 @@ Column {
             indicator: Rectangle {
                 id: indicator
                 anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.topMargin: 3
-                anchors.leftMargin: 4
                 implicitHeight: root.font.pointSize
                 implicitWidth: root.font.pointSize
                 color: "transparent"
@@ -294,28 +177,15 @@ Column {
                 id: indicatorLabel
                 text: config.TranslateShowPassword || "Show Password"
                 anchors.verticalCenter: indicator.verticalCenter
-                anchors.verticalCenterOffset: 0
                 horizontalAlignment: Text.AlignLeft
                 anchors.left: indicator.right
                 anchors.leftMargin: indicator.width / 2
-                font.pointSize: root.font.pointSize * 0.8
+                font.pointSize: root.font.pointSize * 0.75
                 color: root.palette.text
             }
 
             Keys.onReturnPressed: toggle()
             KeyNavigation.down: loginButton
-
-            background: Rectangle {
-                color: "transparent"
-                border.width: parent.visualFocus ? 1 : 0
-                border.color: parent.visualFocus ? root.palette.text : "transparent"
-                height: parent.visualFocus ? 2 : 0
-                width: (indicator.width + indicatorLabel.contentWidth + indicatorLabel.anchors.leftMargin + 2)
-                anchors.top: indicatorLabel.bottom
-                anchors.left: parent.left
-                anchors.leftMargin: 3
-                anchors.topMargin: 8
-            }
         }
 
         states: [
@@ -324,19 +194,15 @@ Column {
                 when: revealSecret.down
                 PropertyChanges {
                     target: revealSecret.contentItem
-                    color: Qt.darker(root.palette.highlight, 1.1)
+                    color: Qt.darker(config.AccentColor, 1.2)
                 }
                 PropertyChanges {
                     target: dot
-                    color: Qt.darker(root.palette.highlight, 1.1)
+                    color: Qt.darker(config.AccentColor, 1.2)
                 }
                 PropertyChanges {
                     target: indicator
-                    border.color: Qt.darker(root.palette.highlight, 1.1)
-                }
-                PropertyChanges {
-                    target: revealSecret.background
-                    border.color: Qt.darker(root.palette.highlight, 1.1)
+                    border.color: Qt.darker(config.AccentColor, 1.2)
                 }
             },
             State {
@@ -344,19 +210,15 @@ Column {
                 when: revealSecret.hovered
                 PropertyChanges {
                     target: indicatorLabel
-                    color: Qt.lighter(root.palette.highlight, 1.1)
+                    color: Qt.lighter(config.AccentColor, 1.3)
                 }
                 PropertyChanges {
                     target: indicator
-                    border.color: Qt.lighter(root.palette.highlight, 1.1)
+                    border.color: Qt.lighter(config.AccentColor, 1.3)
                 }
                 PropertyChanges {
                     target: dot
-                    color: Qt.lighter(root.palette.highlight, 1.1)
-                }
-                PropertyChanges {
-                    target: revealSecret.background
-                    border.color: Qt.lighter(root.palette.highlight, 1.1)
+                    color: Qt.lighter(config.AccentColor, 1.3)
                 }
             },
             State {
@@ -364,19 +226,15 @@ Column {
                 when: revealSecret.visualFocus
                 PropertyChanges {
                     target: indicatorLabel
-                    color: root.palette.highlight
+                    color: config.AccentColor
                 }
                 PropertyChanges {
                     target: indicator
-                    border.color: root.palette.highlight
+                    border.color: config.AccentColor
                 }
                 PropertyChanges {
                     target: dot
-                    color: root.palette.highlight
-                }
-                PropertyChanges {
-                    target: revealSecret.background
-                    border.color: root.palette.highlight
+                    color: config.AccentColor
                 }
             }
         ]
@@ -392,7 +250,6 @@ Column {
 
     }
 
-    // ERROR FIELD
     Item {
         height: root.font.pointSize * 2.3
         width: parent.width / 2
@@ -400,42 +257,29 @@ Column {
         Label {
             id: errorMessage
             width: parent.width
-            text: failed ? config.TranslateLoginFailed || textConstants.loginFailed + "!" : keyboard.capsLock ? textConstants.capslockWarning : null
+            text: config.TranslateLoginFailed || textConstants.loginFailed + "!"
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: root.font.pointSize * 0.8
             font.italic: true
             color: root.palette.text
             opacity: 0
-            states: [
-                State {
-                    name: "fail"
-                    when: failed
-                    PropertyChanges {
-                        target: errorMessage
-                        opacity: 1
-                    }
-                },
-                State {
-                    name: "capslock"
-                    when: keyboard.capsLock
-                    PropertyChanges {
-                        target: errorMessage
-                        opacity: 1
-                    }
-                }
-            ]
-            transitions: [
-                Transition {
-                    PropertyAnimation {
-                        properties: "opacity"
-                        duration: 100
-                    }
-                }
-            ]
+            OpacityAnimator on opacity {
+                id: fadeIn
+                from: 0;
+                to: 1;
+                duration: 200
+                running: false
+            }
+            OpacityAnimator on opacity {
+                id: fadeOut
+                from: 1;
+                to: 0;
+                duration: 400
+                running: false
+            }
         }
     }
 
-    // LOGIN BUTTON
     Item {
         id: login
         height: root.font.pointSize * 3
@@ -448,37 +292,38 @@ Column {
             text: config.TranslateLogin || textConstants.login
             height: root.font.pointSize * 3
             implicitWidth: parent.width
-            enabled: username.text != "" && password.text != "" ? true : false
+            enabled: username.text !== "" && password.text !== "" ? true : false
             hoverEnabled: true
 
             contentItem: Text {
                 text: parent.text
-                color: "#444"
+                color: "#133239"
                 font.pointSize: root.font.pointSize
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                opacity: 0.5
             }
 
             background: Rectangle {
                 id: buttonBackground
-                color: "white"
-                opacity: 0.2
+                color: root.palette.text
                 radius: config.RoundCorners || 0
             }
 
             states: [
                 State {
+                    name: "disabled"
+                    when: !loginButton.enabled
+                    PropertyChanges {
+                        target: buttonBackground
+                        color: "#f6f9fc"
+                    }
+                },
+                State {
                     name: "pressed"
                     when: loginButton.down
                     PropertyChanges {
                         target: buttonBackground
-                        color: Qt.darker(root.palette.highlight, 1.1)
-                        opacity: 1
-                    }
-                    PropertyChanges {
-                        target: loginButton.contentItem
-                        color: "#444"
+                        color: "#7e547e"
                     }
                 },
                 State {
@@ -486,13 +331,7 @@ Column {
                     when: loginButton.hovered
                     PropertyChanges {
                         target: buttonBackground
-                        color: root.palette.highlight
-                        opacity: 1
-                    }
-                    PropertyChanges {
-                        target: loginButton.contentItem
-                        opacity: 1
-                        color: "#444"
+                        color: Qt.lighter(config.AccentColor, 1.2) || Qt.lighter("orange", 1.2)
                     }
                 },
                 State {
@@ -500,71 +339,51 @@ Column {
                     when: loginButton.visualFocus
                     PropertyChanges {
                         target: buttonBackground
-                        color: root.palette.highlight
-                        opacity: 1
-                    }
-                    PropertyChanges {
-                        target: loginButton.contentItem
-                        opacity: 1
-                        color: "#444"
-                    }
-                },
-                State {
-                    name: "enabled"
-                    when: loginButton.enabled
-                    PropertyChanges {
-                        target: buttonBackground;
-                        color: root.palette.text;
-                        opacity: 1
-                    }
-                    PropertyChanges {
-                        target: loginButton.contentItem;
-                        opacity: 1
+                        color: config.AccentColor
                     }
                 }
             ]
 
             transitions: [
                 Transition {
-                    from: ""; to: "enabled"
+                    from: "disabled"; to: ""
                     PropertyAnimation {
-                        properties: "opacity, color";
+                        properties: "color"
                         duration: 500
                     }
                 },
                 Transition {
-                    from: "enabled"; to: ""
                     PropertyAnimation {
-                        properties: "opacity, color";
-                        duration: 300
+                        properties: "color"
+                        duration: 100
                     }
                 }
             ]
 
             Keys.onReturnPressed: clicked()
-            onClicked: sddm.login(username.text, password.text, sessionSelect.selectedSession)
+            onClicked: username.text !== "" && password.text !== "" ? sddm.login(username.text, password.text, sessionSelector.selectedSession) : sddm.loginFailed()
         }
     }
 
-    // SESSION SELECT
     SessionButton {
-        id: sessionSelect
+        id: sessionSelector
         textConstantSession: textConstants.session
     }
 
     Connections {
         target: sddm
         onLoginSucceeded: {}
-        onLoginFailed: {
-            failed = true
-            resetError.running ? resetError.stop() && resetError.start() : resetError.start()
+        onLoginFailed: { 
+            fadeIn.start()
+            resetError.running ? resetError.stop() & resetError.start() : resetError.start()
         }
     }
 
     Timer {
         id: resetError
         interval: 2000
-        onTriggered: failed = false
+        onTriggered: fadeOut.start()
         running: false
     }
+
 }

@@ -26,7 +26,6 @@ RowLayout {
     spacing: root.font.pointSize
 
     property var suspend: ["Suspend", config.TranslateSuspend || textConstants.suspend, sddm.canSuspend]
-    property var hibernate: ["Hibernate", config.TranslateHibernate || textConstants.hibernate, sddm.canHibernate]
     property var reboot: ["Reboot", config.TranslateReboot || textConstants.reboot, sddm.canReboot]
     property var shutdown: ["Shutdown", config.TranslateShutdown || textConstants.shutdown, sddm.canPowerOff]
 
@@ -34,23 +33,23 @@ RowLayout {
 
     Repeater {
 
-        model: [suspend, hibernate, reboot, shutdown]
+        model: [suspend, reboot, shutdown]
 
         RoundButton {
-            id: icon
+            enabled: modelData[2]
             text: modelData[1]
             font.pointSize: root.font.pointSize * 0.8
             Layout.alignment: Qt.AlignHCenter
-            icon.source: modelData ? Qt.resolvedUrl("../Assets/" + modelData[0] + ".svgz") : ""
+            icon.source: modelData ? Qt.resolvedUrl("../Assets/Icons/" + modelData[0] + ".svg") : ""
             icon.height: 2 * Math.round((root.font.pointSize * 3) / 2)
             icon.width: 2 * Math.round((root.font.pointSize * 3) / 2)
             display: AbstractButton.TextUnderIcon
-            visible: modelData[2]
+            opacity: modelData[2] ? 1 : 0.3
             hoverEnabled: true
             palette.buttonText: root.palette.text
             background: Rectangle {
                 height: 2
-                color: "transparent"
+                color: "azure"
                 width: parent.width
                 border.width: parent.visualFocus ? 1 : 0
                 border.color: "transparent"
@@ -59,7 +58,7 @@ RowLayout {
             Keys.onReturnPressed: clicked()
             onClicked: {
                 parent.forceActiveFocus()
-                index == 0 ? sddm.suspend() : index == 1 ? sddm.hibernate() : index == 2 ? sddm.reboot() : sddm.powerOff()
+                index == 0 ? sddm.suspend() : index == 1 ? sddm.reboot() : sddm.powerOff()
             }
             KeyNavigation.up: exposedLogin
             KeyNavigation.left: index == 0 ? exposedLogin : parent.children[index-1]
@@ -70,11 +69,11 @@ RowLayout {
                     when: parent.children[index].down
                     PropertyChanges {
                         target: parent.children[index]
-                        palette.buttonText: Qt.darker(root.palette.highlight, 1.1)
+                        palette.buttonText: Qt.lighter("slateblue", 1.1)
                     }
                     PropertyChanges {
                         target: parent.children[index].background
-                        border.color: Qt.darker(root.palette.highlight, 1.1)
+                        border.color: Qt.lighter("slateblue", 1.3)
                     }
                 },
                 State {
@@ -82,11 +81,11 @@ RowLayout {
                     when: parent.children[index].hovered
                     PropertyChanges {
                         target: parent.children[index]
-                        palette.buttonText: Qt.lighter(root.palette.highlight, 1.1)
+                        palette.buttonText: Qt.lighter("slateblue", 1.5)
                     }
                     PropertyChanges {
                         target: parent.children[index].background
-                        border.color: Qt.lighter(root.palette.highlight, 1.1)
+                        border.color: Qt.lighter("slateblue", 1.7)
                     }
                 },
                 State {
@@ -94,11 +93,11 @@ RowLayout {
                     when: parent.children[index].visualFocus
                     PropertyChanges {
                         target: parent.children[index]
-                        palette.buttonText: root.palette.highlight
+                        palette.buttonText: Qt.lighter("slateblue", 1.3)
                     }
                     PropertyChanges {
                         target: parent.children[index].background
-                        border.color: root.palette.highlight
+                        border.color: Qt.lighter("slateblue", 1.5)
                     }
                 }
             ]

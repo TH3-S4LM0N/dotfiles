@@ -1,13 +1,11 @@
 [SddmGreeterTheme]
-Name=Salmon's OneDark
-Description=aaaaaa
-Author=TH3 S4LM0N
+Name=sddm-astronaut
+Description=sddm theme for space enthusiast
+Author=totoro
+License=GPLv.3
 Type=sddm-theme
 Version=1.0
-Website=https://github.com/TH3-S4LM0N/dotfiles
-Screenshot=Background.jpg
+Screenshot=preview.png
 MainScript=Main.qml
 ConfigFile=theme.conf
-TranslationsDirectory=translations
-Theme-Id=salmon-onedark
-Theme-API=2.11
+Theme-Id=sddm-astronaut
