@@ -1,11 +1,10 @@
 [SddmGreeterTheme]
-Name=sddm-astronaut
-Description=sddm theme for space enthusiast
-Author=totoro
-License=GPLv.3
+Name=salmon-theme
+Description=salmons sddm theme
+Author=totoro, TH3-S4LM0N
+License=MIT
 Type=sddm-theme
 Version=1.0
-Screenshot=preview.png
 MainScript=Main.qml
 ConfigFile=theme.conf
-Theme-Id=sddm-astronaut
+Theme-Id=sddm-salmon

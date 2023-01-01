@@ -2,6 +2,8 @@
 cfg="$HOME/.config"
 sudo mkdir -p $HOME/.config/alacritty/../fish/../dunst/../helix/../neofetch/../polybar/../rofi/../leftwm/themes/salmon/../../../../../../etc/sddm.conf.d
 
+yay -Sy qt5-graphicaleffects qt5-quickcontrols2
+
 cp alacritty.yml $cfg/alacritty/
 cp config.fish $cfg/fish/
 cp dunstrc $cfg/dunst/
