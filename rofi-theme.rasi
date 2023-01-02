@@ -1,7 +1,7 @@
 * {
     neonblue: #40A4FF;
     dirtywhite: #abb2bf;
-    gray: #1e2127;
+    gray: rgba ( 30, 33, 39, 95 % );
     red: #FF5250;
 }
 window {
