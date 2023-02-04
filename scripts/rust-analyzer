@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# this just runs rust-analyzer as an alias for helix
+$HOME/.vscode/extensions/rust-lang.rust-analyzer-0.3.1386-linux-x64/server/rust-analyzer
