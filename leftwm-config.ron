@@ -35,7 +35,9 @@
           x: 0, y: 0, height: 300, width: 200,
         ),
     ],
-    window_rules: [],
+    window_rules: [
+    (window_class: "supermethbros", spawn_floating: true)
+],
     disable_current_tag_swap: true,
     disable_tile_drag: false,
     focus_behaviour: Sloppy,
