@@ -8,6 +8,7 @@
  - `a5huynh.vscode-ron`
  - `icrawl.discord-vscode`
  - `zhuangtongfa.material-theme`
+ - `bbenoist.Nix`
 
  ## settings.json
  ```json
